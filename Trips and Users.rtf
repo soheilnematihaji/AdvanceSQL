@@ -1,0 +1,99 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red25\green25\blue25;\red29\green38\blue42;\red67\green91\blue103;
+\red245\green247\blue249;\red29\green38\blue42;\red255\green255\blue255;\red29\green38\blue42;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c12941\c12941;\cssrgb\c14902\c19608\c21961;\cssrgb\c32941\c43137\c47843;
+\cssrgb\c96863\c97647\c98039;\cssrgb\c14977\c19694\c22010;\cssrgb\c100000\c100000\c100000\c0;\cssrgb\c14940\c19651\c21986;}
+\margl1440\margr1440\vieww28600\viewh15480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #
+\f1\b\fs32 \cf2 \expnd0\expndtw0\kerning0
+Trips and Users\cf2 \
+\
+#https://leetcode.com/problems/trips-and-users/\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs28 \cf3 Table: 
+\f3\fs26 \cf4 \cb5 Trips
+\f2\fs28 \cf3 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 +-------------+----------+\
+| Column Name | Type     |\
++-------------+----------+\
+| Id          | int      |\
+| Client_Id   | int      |\
+| Driver_Id   | int      |\
+| City_Id     | int      |\
+| Status      | enum     |\
+| Request_at  | date     |     \
++-------------+----------+\
+Id is the primary key for this table.\
+The table holds all taxi trips. Each trip has a unique Id, while Client_Id and Driver_Id are foreign keys to the Users_Id at the Users table.\
+Status is an ENUM type of (\'91completed\'92, \'91cancelled_by_driver\'92, \'91cancelled_by_client\'92).\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 \'a0\
+Table: 
+\f3\fs26 \cf4 \cb5 Users
+\f2\fs28 \cf3 \cb1 \
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 +-------------+----------+\
+| Column Name | Type     |\
++-------------+----------+\
+| Users_Id    | int      |\
+| Banned      | enum     |\
+| Role        | enum     |\
++-------------+----------+\
+Users_Id is the primary key for this table.\
+The table holds all users. Each user has a unique Users_Id, and Role is an ENUM type of (\'91client\'92, \'91driver\'92, \'91partner\'92).\
+Status is an ENUM type of (\'91Yes\'92, \'91No\'92).\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 \'a0\
+Write a SQL query to find the 
+\f1\b cancellation rate
+\f2\b0  of requests with unbanned users (
+\f1\b both client and driver must not be banned
+\f2\b0 ) each day between 
+\f3\fs26 \cf4 \cb5 "2013-10-01"
+\f2\fs28 \cf3 \cb1  and 
+\f3\fs26 \cf4 \cb5 "2013-10-03"
+\f2\fs28 \cf3 \cb1 .\
+The 
+\f1\b cancellation rate
+\f2\b0  is computed by dividing the number of canceled (by client or driver) requests with unbanned users by the total number of requests with unbanned users on that day.\
+Return the result table in any order. Round 
+\f3\fs26 \cf4 \cb5 Cancellation Rate
+\f2\fs28 \cf3 \cb1  to 
+\f1\b two decimal
+\f2\b0  points.
+\f4\fs26 \cf3 \cb5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7 \
+\pard\pardeftab720\partightenfactor0
+\cf8 Solution by Soheil Nematihaji:\
+\
+Solution :\
+\
+select \
+    distinct t1.Request_at as Day , \
+    case when outp.cr is null then 1 else outp.cr end as "Cancellation Rate"\
+from Trips t1 left join \
+    (\
+    select distinct (o.Request_at) as Day,  ROUND(1-o.rate,2)  as cr from \
+    (\
+        select t.Request_at,t.Status,count(1) over(partition by t.Request_at , t.Status ) / count(1) over(partition by          t.Request_at) as rate from Trips t \
+        inner join Users u1 on u1.Users_Id=t.Client_Id and u1.Banned='No'\
+        inner join Users u2 on u2.Users_Id=t.Driver_Id and u2.Banned='No'\
+) o where o.status="completed"\
+) outp \
+on outp.Day=t1.Request_at\
+inner join Users u1 on u1.Users_Id=t1.Client_Id and u1.Banned='No'\
+inner join Users u2 on u2.Users_Id=t1.Driver_Id and u2.Banned='No'\
+where t1.Request_at<"2013-10-04" and t1.Request_at>="2013-10-01"\
+}

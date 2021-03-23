@@ -1,0 +1,97 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red25\green25\blue25;\red29\green38\blue42;\red67\green91\blue103;
+\red245\green247\blue249;\red29\green38\blue42;\red255\green255\blue255;\red29\green38\blue42;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c12941\c12941;\cssrgb\c14902\c19608\c21961;\cssrgb\c32941\c43137\c47843;
+\cssrgb\c96863\c97647\c98039;\cssrgb\c14977\c19694\c22010;\cssrgb\c100000\c100000\c100000\c0;\cssrgb\c14940\c19651\c21986;}
+\margl1440\margr1440\vieww28600\viewh15480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #
+\f1\b\fs32 \cf2 \expnd0\expndtw0\kerning0
+Median Employee Salary\cf2 \
+\
+#https://leetcode.com/problems/median-employee-salary/\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs28 \cf3 The 
+\f3\fs26 \cf4 \cb5 Employee
+\f2\fs28 \cf3 \cb1  table holds all employees. The employee table has three columns: Employee Id, Company Name, and Salary.\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 +-----+------------+--------+\
+|Id   | Company    | Salary |\
++-----+------------+--------+\
+|1    | A          | 2341   |\
+|2    | A          | 341    |\
+|3    | A          | 15     |\
+|4    | A          | 15314  |\
+|5    | A          | 451    |\
+|6    | A          | 513    |\
+|7    | B          | 15     |\
+|8    | B          | 13     |\
+|9    | B          | 1154   |\
+|10   | B          | 1345   |\
+|11   | B          | 1221   |\
+|12   | B          | 234    |\
+|13   | C          | 2345   |\
+|14   | C          | 2645   |\
+|15   | C          | 2645   |\
+|16   | C          | 2652   |\
+|17   | C          | 65     |\
++-----+------------+--------+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 Write a SQL query to find the median salary of each company. Bonus points if you can solve it without using any built-in SQL functions.\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 +-----+------------+--------+\
+|Id   | Company    | Salary |\
++-----+------------+--------+\
+|5    | A          | 451    |\
+|6    | A          | 513    |\
+|12   | B          | 234    |\
+|9    | B          | 1154   |\
+|14   | C          | 2645   |\
++-----+------------+--------+\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7 \
+\pard\pardeftab720\partightenfactor0
+\cf8 Solution by Soheil Nematihaji:\
+\
+Solution 1:\
+\
+select firstone.Id,firstone.Company,firstone.Salary  from (\
+select Id,Company, Salary, \
+    row_number() over( partition by company order by Salary) as rownum,\
+    count(1) over(partition by company) as count1\
+    \
+    from Employee e  ) firstone where\
+(rownum=FLOOR(count1/2)+1 and FLOOR(count1/2) !=count1/2) or \
+\
+(rownum=FLOOR(count1/2) and FLOOR(count1/2) =count1/2)  or\
+\
+(rownum=FLOOR(count1/2)+1 and FLOOR(count1/2) =count1/2) \
+\
+\
+\
+solution 2:\
+\
+select firstone.Id,firstone.Company,firstone.Salary  from (\
+select Id,Company, Salary, row_number() over( partition by company order by Salary) as rownum\
+    from Employee e) firstone, \
+#order by e.salary\
+\
+(select Company, count(1) as count1 from Employee \
+group by Company) second \
+\
+where firstone.Company=second.Company and (\
+(\
+firstone.rownum=FLOOR(second.count1/2)+1 and FLOOR(second.count1/2) !=second.count1/2) or \
+\
+(firstone.rownum=FLOOR(second.count1/2) and FLOOR(second.count1/2) =second.count1/2)  or\
+\
+(firstone.rownum=FLOOR(second.count1/2)+1 and FLOOR(second.count1/2) =second.count1/2) )\
+}

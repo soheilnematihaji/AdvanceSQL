@@ -1,0 +1,72 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red25\green25\blue25;\red29\green38\blue42;\red67\green91\blue103;
+\red245\green247\blue249;\red29\green38\blue42;\red255\green255\blue255;\red29\green38\blue42;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c12941\c12941;\cssrgb\c14902\c19608\c21961;\cssrgb\c32941\c43137\c47843;
+\cssrgb\c96863\c97647\c98039;\cssrgb\c14977\c19694\c22010;\cssrgb\c100000\c100000\c100000\c0;\cssrgb\c14940\c19651\c21986;}
+\margl1440\margr1440\vieww28600\viewh15480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #
+\f1\b\fs32 \cf2 \expnd0\expndtw0\kerning0
+Average Salary: Departments VS Company\
+\
+#https://leetcode.com/problems/average-salary-departments-vs-company/\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs28 \cf3 Given two tables as below, write a query to display the comparison result (higher/lower/same) of the average salary of employees in a department to the company's average salary.\
+\'a0\
+Table: 
+\f3\fs26 \cf4 \cb5 salary
+\f4 \cf3 \
+| id | employee_id | amount | pay_date   |\
+|----|-------------|--------|------------|\
+| 1  | 1           | 9000   | 2017-03-31 |\
+| 2  | 2           | 6000   | 2017-03-31 |\
+| 3  | 3           | 10000  | 2017-03-31 |\
+| 4  | 1           | 7000   | 2017-02-28 |\
+| 5  | 2           | 6000   | 2017-02-28 |\
+| 6  | 3           | 8000   | 2017-02-28 |\
+
+\f2\fs28 \cb1 \'a0\
+The 
+\f1\b employee_id
+\f2\b0  column refers to the 
+\f1\b employee_id
+\f2\b0  in the following table 
+\f3\fs26 \cf4 \cb5 employee
+\f2\fs28 \cf3 \cb1 .\
+\'a0\
+
+\f4\fs26 \cb5 | employee_id | department_id |\
+|-------------|---------------|\
+| 1           | 1             |\
+| 2           | 2             |\
+| 3           | 2             |\
+
+\f2\fs28 \cb1 \'a0\
+So for the sample data above, the result is:\
+\'a0\
+
+\f4\fs26 \cb5 | pay_month | department_id | comparison  |\
+|-----------|---------------|-------------|\
+| 2017-03   | 1             | higher      |\
+| 2017-03   | 2             | lower       |\
+| 2017-02   | 1             | same        |\
+| 2017-02   | 2             | same        |\
+\
+\cf6 \cb7 \
+\
+\cf8 Solution by Soheil Nematihaji:\
+\
+select distinct avg_tab.date_month as pay_month, avg_tab.department_id, \
+			case when avg_tab.avg_com > avg_tab.avg_dep then "lower"\
+    				when avg_tab.avg_com = avg_tab.avg_dep then "same"\
+    				else "higher" end as comparison  \
+	from\
+		(\
+		select  CAST(s.pay_date as char(7))  as date_month  ,e.department_id , avg(s.amount) over(partition by CAST(s.pay_date as char(7))) as avg_com, avg(s.amount) over(partition 			by e.department_id , CAST(s.pay_date as char(7))) as avg_dep \
+				from salary s join employee e on s.employee_id= e.employee_id\
+		) avg_tab}

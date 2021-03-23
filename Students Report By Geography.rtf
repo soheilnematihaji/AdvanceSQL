@@ -1,0 +1,57 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red25\green25\blue25;\red29\green38\blue42;\red67\green91\blue103;
+\red245\green247\blue249;\red78\green106\blue120;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c12941\c12941;\cssrgb\c14902\c19608\c21961;\cssrgb\c32941\c43137\c47843;
+\cssrgb\c96863\c97647\c98039;\cssrgb\c37647\c49020\c54510;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #
+\f1\b\fs32 \cf2 \expnd0\expndtw0\kerning0
+Students Report By Geography\
+\
+#https://leetcode.com/problems/students-report-by-geography/\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs28 \cf3 A U.S graduate school has students from Asia, Europe and America. The students' location information are stored in table 
+\f3\fs26 \cf4 \cb5 student
+\f2\fs28 \cf3 \cb1  as below.\
+\'a0\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 | name   | continent |\
+|--------|-----------|\
+| Jack   | America   |\
+| Pascal | Europe    |\
+| Xi     | Asia      |\
+| Jane   | America   |\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 \'a0\
+\pard\pardeftab720\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://en.wikipedia.org/wiki/Pivot_table"}}{\fldrslt \cf6 Pivot}} the continent column in this table so that each name is sorted alphabetically and displayed underneath its corresponding continent. The output headers should be America, Asia and Europe respectively. It is guaranteed that the student number from America is no less than either Asia or Europe.\
+\'a0\
+For the sample input, the output is:\
+\'a0\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs26 \cf3 \cb5 | America | Asia | Europe |\
+|---------|------|--------|\
+| Jack    | Xi   | Pascal |\
+| Jane    |      |        |\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 \'a0\
+\
+\
+\
+\
+Solution by Soheil Nematihaji:\
+\
+select america_table.name as America ,Asia_table.name  as Asia, Europe_table.name as Europe  from \
+(select row_number() over() as row_num,name from student where continent = 'America' order by name) as america_table  \
+left outer join (select row_number() over() as row_num,name from student where continent = 'Asia' order by name) Asia_table on Asia_table.row_num=america_table.row_num left outer join \
+(select row_number() over() as row_num,name from student where continent = 'Europe' order by name) as Europe_table on america_table.row_num=Europe_table.row_num }
