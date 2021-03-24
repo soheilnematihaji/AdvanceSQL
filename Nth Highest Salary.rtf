@@ -1,0 +1,71 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2577
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue-Bold;\f2\fnil\fcharset0 HelveticaNeue;
+\f3\fnil\fcharset0 HelveticaNeue-Italic;\f4\fmodern\fcharset0 Courier;\f5\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red25\green25\blue25;\red29\green38\blue42;\red67\green91\blue103;
+\red245\green247\blue249;\red29\green38\blue42;\red255\green255\blue255;\red29\green38\blue42;}
+{\*\expandedcolortbl;;\cssrgb\c12941\c12941\c12941;\cssrgb\c14902\c19608\c21961;\cssrgb\c32941\c43137\c47843;
+\cssrgb\c96863\c97647\c98039;\cssrgb\c14977\c19694\c22010;\cssrgb\c100000\c100000\c100000\c0;\cssrgb\c14940\c19651\c21986;}
+\margl1440\margr1440\vieww28600\viewh15480\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 #
+\f1\b\fs32 \cf2 \expnd0\expndtw0\kerning0
+Nth Highest Salary\cf2 \
+\
+#https://leetcode.com/problems/nth-highest-salary/\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs28 \cf3 Write a SQL query to get the 
+\f3\i n
+\f2\i0\fs21 th
+\fs28  highest salary from the 
+\f4\fs26 \cf4 \cb5 Employee
+\f2\fs28 \cf3 \cb1  table.\
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs26 \cf3 \cb5 +----+--------+\
+| Id | Salary |\
++----+--------+\
+| 1  | 100    |\
+| 2  | 200    |\
+| 3  | 300    |\
++----+--------+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs28 \cf3 \cb1 For example, given the above Employee table, the 
+\f3\i n
+\f2\i0\fs21 th
+\fs28  highest salary where 
+\f3\i n
+\f2\i0  = 2 is 
+\f4\fs26 \cf4 \cb5 200
+\f2\fs28 \cf3 \cb1 . If there is no 
+\f3\i n
+\f2\i0\fs21 th
+\fs28  highest salary, then the query should return 
+\f4\fs26 \cf4 \cb5 null
+\f2\fs28 \cf3 \cb1 .\
+\pard\pardeftab720\partightenfactor0
+
+\f5\fs26 \cf3 \cb5 +------------------------+\
+| getNthHighestSalary(2) |\
++------------------------+\
+| 200                    |\
++------------------------+\
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7 \
+\pard\pardeftab720\partightenfactor0
+\cf8 Solution by Soheil Nematihaji:\
+\
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT\
+BEGIN\
+set N=N-1;\
+  RETURN (\
+      # Write your MySQL query statement below.\
+      select sa.salary from (select distinct(e.salary) from Employee e order by salary desc limit N,1) sa\
+      \
+  );\
+END\
+}
